@@ -1,9 +1,9 @@
-Welcome to this blog template by [cassidoo](https://cassidoo.co)!
+欢迎来到这个由 Astro 创建的技术博客!
 
-It's using Astro and TinaCMS. You can [clone it on GitHub](https://github.com/cassidoo/blahg) to use it for yourself, and see how it works! I would _love_ if you told me when you do use it, I love seeing variations on it!
+它使用了 Astro 和 TinaCMS。加载速度和性能确实如Astro宣传的那样。
 
-The tags at the bottom of the page are dynamically generated. The more tags you use, the more tags are added to the list! Posts are simple markdown files.
+你也可以查看[个人主页](https://looklin.github.io/)或我的 [GitHub 个人主页](https://github.com/looklin)。或者不看也行吧。本身就是主要为了个人记录，而不是为了展示分享。
 
-You should also check out [my newsletter](https://cassidoo.co/newsletter) or my [GitHub profile](https://github.com/cassidoo). Or don't. Follow your dreams.
+Flowers will bloom along the way,so will my dream.
 
-Enjoy!
+

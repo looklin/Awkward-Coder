@@ -5,7 +5,7 @@ description: >-
   深入解析 TickerQ 的核心技术要点：零反射、Source Generator、Cron 表达式、EF Core 持久化和实时仪表盘，以及在实际项目中的实践应用。
 tags:
   - technical
-added: "May 25 2026"
+added: "February 1 2026"
 ---
 
 ## 引言

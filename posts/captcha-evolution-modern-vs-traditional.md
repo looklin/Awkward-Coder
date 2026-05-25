@@ -5,7 +5,7 @@ description: >-
   对比传统图形验证码与现代智能验证码（reCAPTCHA、Turnstile、hCaptcha）的技术差异，并提供前端和 Node.js 的完整实现方案。
 tags:
   - technical
-added: "May 25 2026"
+added: "November 25 2025"
 ---
 
 ## 引言
