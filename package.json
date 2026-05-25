@@ -1,0 +1,20 @@
+{
+	"name": "awkward-coder",
+	"version": "0.0.6",
+	"private": true,
+	"scripts": {
+		"dev": "astro dev",
+		"start": "astro dev",
+		"build": "astro build",
+		"preview": "astro preview",
+		"astro": "astro"
+	},
+	"devDependencies": {
+		"@astrojs/rss": "^4.0.15",
+		"@astrojs/sitemap": "^3.7.0",
+		"astro": "^5.18.0",
+		"prettier": "^3.3.3",
+		"prettier-plugin-astro": "^0.14.1"
+	},
+	"dependencies": {}
+}
