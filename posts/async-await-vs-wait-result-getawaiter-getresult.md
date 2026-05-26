@@ -1,3 +1,13 @@
+---
+title: async/await vs .Wait()/.Result() vs GetAwaiter().GetResult() — 区别、陷阱与最佳实践
+slug: async-await-vs-wait-result-getawaiter-getresult
+description: >-
+  从原理出发，结合真实场景，彻底搞懂 C# 中三种异步等待方式的区别、死锁陷阱、异常处理差异以及工程最佳实践。
+tags:
+  - technical
+added: "May 26 2026"
+---
+
 # async/await vs .Wait()/.Result() vs GetAwaiter().GetResult() — 区别、陷阱与最佳实践
 
 > 在 C# 异步编程中，"等待"一个 Task 完成有多种写法。它们看起来效果相似，但在底层行为、线程模型和异常处理上截然不同。本文从原理出发，结合真实场景，帮你彻底搞清楚该用哪种方式。

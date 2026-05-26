@@ -1,3 +1,13 @@
+---
+title: WPF、Avalonia UI vs Vue — 前端开发者的桌面 UI 入门指南
+slug: wpf-avalonia-vue-comparison-for-frontend-devs
+description: >-
+  从前端 Vue 开发者的视角，用熟悉的概念类比理解 WPF 和 Avalonia UI 的核心概念、数据绑定、布局系统和 MVVM 架构，附完整对照表和实战示例。
+tags:
+  - technical
+added: "May 26 2026"
+---
+
 # WPF、Avalonia UI vs Vue — 前端开发者的桌面 UI 入门指南
 
 > 作为一名前端开发者，你可能精通 Vue/React/Angular，但在需要开发桌面应用时，面对 WPF、Avalonia UI 这类技术可能会感到陌生。本文从前端视角出发，用你熟悉的 Vue 概念去类比理解 WPF 和 Avalonia UI，帮你快速建立知识映射。
