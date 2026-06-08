@@ -1,0 +1,64 @@
+---
+import { getCollection } from "astro:content";
+import BaseHead from "../../components/BaseHead.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import Post from "../../components/Post.astro";
+import Pagination from "../../components/Pagination.astro";
+import ColorScript from "../../components/ColorScript.astro";
+
+import { title, subtitle } from "../../settings/settings.json"
+
+const POSTS_PER_PAGE = 10;
+
+const allPosts = await getCollection("posts");
+const sorted = allPosts.sort(
+	(a, b) =>
+		new Date(b.data.updated || b.data.added).valueOf() -
+		new Date(a.data.updated || a.data.added).valueOf(),
+);
+const totalPages = Math.ceil(sorted.length / POSTS_PER_PAGE);
+const posts = sorted.slice(0, POSTS_PER_PAGE);
+---
+
+<!doctype html>
+<html lang="en-us">
+	<BaseHead title={`${title} - 文章列表`} description={subtitle} />
+	<body>
+		<Header />
+		<main>
+			<h2>
+				全部文章
+				{totalPages > 1 && (
+					<span class="page-info">— 第 1 / {totalPages} 页</span>
+				)}
+			</h2>
+			<content>
+				<ul class="posts-list">
+					{
+						posts.map(
+							({
+								url: postUrl,
+								data: { description, slug, title: postTitle, tags, added: date },
+							}) => <Post url={postUrl} {description} {date} {slug} title={postTitle} {tags} />
+						)
+					}
+				</ul>
+			</content>
+
+			{totalPages > 1 && (
+				<Pagination baseUrl="/posts" currentPage={1} {totalPages} />
+			)}
+		</main>
+		<Footer />
+		<ColorScript />
+	</body>
+</html>
+
+<style>
+	.page-info {
+		font-size: 0.7em;
+		color: var(--gray);
+		font-weight: 400;
+	}
+</style>

@@ -1,0 +1,183 @@
+---
+import { getCollection } from "astro:content";
+import BaseHead from "../../components/BaseHead.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import Post from "../../components/Post.astro";
+import Pagination from "../../components/Pagination.astro";
+import ColorScript from "../../components/ColorScript.astro";
+
+import { title, subtitle } from "../../settings/settings.json"
+
+export async function getStaticPaths() {
+	const POSTS_PER_PAGE = 10;
+	const allPosts = await getCollection("posts");
+	const sorted = allPosts.sort(
+		(a, b) =>
+			new Date(b.data.updated || b.data.added).valueOf() -
+			new Date(a.data.updated || a.data.added).valueOf(),
+	);
+
+	const totalPages = Math.ceil(sorted.length / POSTS_PER_PAGE);
+	const paths = [];
+
+	for (let i = 2; i <= totalPages; i++) {
+		paths.push({
+			params: { page: String(i) },
+			props: {
+				pageNum: i,
+				totalPages,
+				posts: sorted.slice((i - 1) * POSTS_PER_PAGE, i * POSTS_PER_PAGE),
+			},
+		});
+	}
+
+	return paths;
+}
+
+const { pageNum, totalPages, posts } = Astro.props;
+
+function pageLink(n: number): string {
+	if (n === 1) return "/posts";
+	return `/posts/${n}/`;
+}
+
+function getPageNumbers(): (number | string)[] {
+	const pages: (number | string)[] = [];
+	const maxVisible = 7;
+
+	if (totalPages <= maxVisible) {
+		for (let i = 1; i <= totalPages; i++) pages.push(i);
+	} else {
+		pages.push(1);
+		if (pageNum > 3) pages.push("...");
+
+		const start = Math.max(2, pageNum - 1);
+		const end = Math.min(totalPages - 1, pageNum + 1);
+		for (let i = start; i <= end; i++) pages.push(i);
+
+		if (pageNum < totalPages - 2) pages.push("...");
+		pages.push(totalPages);
+	}
+	return pages;
+}
+---
+
+<!doctype html>
+<html lang="en-us">
+	<BaseHead title={`${title} - 文章列表 (第 ${pageNum} 页)`} description={subtitle} />
+	<body>
+		<Header />
+		<main>
+			<h2>
+				全部文章
+				<span class="page-info">— 第 {pageNum} / {totalPages} 页</span>
+			</h2>
+			<content>
+				<ul class="posts-list">
+					{
+						posts.map(
+							({
+								url: postUrl,
+								data: { description, slug, title: postTitle, tags, added: date },
+							}) => <Post url={postUrl} {description} {date} {slug} title={postTitle} {tags} />
+						)
+					}
+				</ul>
+			</content>
+
+			<div class="pagination">
+				{pageNum > 1 && (
+					<a href={pageLink(pageNum - 1)} class="page-link prev">← 上一页</a>
+				)}
+
+				<div class="page-numbers">
+					{getPageNumbers().map((p) =>
+						typeof p === "string" ? (
+							<span class="page-ellipsis">{p}</span>
+						) : p === pageNum ? (
+							<span class="page-number active">{p}</span>
+						) : (
+							<a href={pageLink(p)} class="page-number">{p}</a>
+						)
+					)}
+				</div>
+
+				{pageNum < totalPages && (
+					<a href={pageLink(pageNum + 1)} class="page-link next">下一页 →</a>
+				)}
+			</div>
+		</main>
+		<Footer />
+		<ColorScript />
+	</body>
+</html>
+
+<style>
+	.page-info {
+		font-size: 0.7em;
+		color: var(--gray);
+		font-weight: 400;
+	}
+
+	.pagination {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		margin: 40px 0;
+		flex-wrap: wrap;
+	}
+
+	.page-link {
+		padding: 8px 16px;
+		border: 1px solid var(--gray);
+		text-decoration: none;
+		color: var(--black);
+	}
+
+	.page-link:hover {
+		background-color: var(--highlight);
+	}
+
+	.page-numbers {
+		display: flex;
+		gap: 4px;
+	}
+
+	.page-number {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 36px;
+		height: 36px;
+		text-decoration: none;
+		color: var(--black);
+	}
+
+	.page-number:hover {
+		background-color: var(--highlight);
+	}
+
+	.page-number.active {
+		font-weight: bold;
+		border-bottom: 2px solid var(--blue);
+	}
+
+	.page-ellipsis {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 36px;
+		height: 36px;
+		color: var(--gray);
+	}
+
+	@media (max-width: 600px) {
+		.page-number {
+			width: 30px;
+			height: 30px;
+			font-size: 0.9em;
+		}
+	}
+</style>

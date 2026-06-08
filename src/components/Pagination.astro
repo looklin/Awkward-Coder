@@ -1,0 +1,120 @@
+---
+interface Props {
+	baseUrl: string;
+	currentPage: number;
+	totalPages: number;
+}
+
+const { baseUrl, currentPage, totalPages } = Astro.props;
+
+function pageUrl(page: number): string {
+	if (page === 1) return baseUrl;
+	return `${baseUrl}/${page}/`;
+}
+
+// Generate page numbers to show (max 7 visible)
+function getPageNumbers(): (number | string)[] {
+	const pages: (number | string)[] = [];
+	const maxVisible = 7;
+
+	if (totalPages <= maxVisible) {
+		for (let i = 1; i <= totalPages; i++) pages.push(i);
+	} else {
+		pages.push(1);
+		if (currentPage > 3) pages.push("...");
+
+		const start = Math.max(2, currentPage - 1);
+		const end = Math.min(totalPages - 1, currentPage + 1);
+		for (let i = start; i <= end; i++) pages.push(i);
+
+		if (currentPage < totalPages - 2) pages.push("...");
+		pages.push(totalPages);
+	}
+	return pages;
+}
+---
+
+<div class="pagination">
+	{currentPage > 1 && (
+		<a href={pageUrl(currentPage - 1)} class="page-link prev">← 上一页</a>
+	)}
+
+	<div class="page-numbers">
+		{getPageNumbers().map((p) =>
+			typeof p === "string" ? (
+				<span class="page-ellipsis">{p}</span>
+			) : p === currentPage ? (
+				<span class="page-number active">{p}</span>
+			) : (
+				<a href={pageUrl(p)} class="page-number">{p}</a>
+			)
+		)}
+	</div>
+
+	{currentPage < totalPages && (
+		<a href={pageUrl(currentPage + 1)} class="page-link next">下一页 →</a>
+	)}
+</div>
+
+<style>
+	.pagination {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		margin: 40px 0;
+		flex-wrap: wrap;
+	}
+
+	.page-link {
+		padding: 8px 16px;
+		border: 1px solid var(--gray);
+		text-decoration: none;
+		color: var(--black);
+	}
+
+	.page-link:hover {
+		background-color: var(--highlight);
+	}
+
+	.page-numbers {
+		display: flex;
+		gap: 4px;
+	}
+
+	.page-number {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 36px;
+		height: 36px;
+		text-decoration: none;
+		color: var(--black);
+	}
+
+	.page-number:hover {
+		background-color: var(--highlight);
+	}
+
+	.page-number.active {
+		font-weight: bold;
+		border-bottom: 2px solid var(--blue);
+	}
+
+	.page-ellipsis {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 36px;
+		height: 36px;
+		color: var(--gray);
+	}
+
+	@media (max-width: 600px) {
+		.page-number {
+			width: 30px;
+			height: 30px;
+			font-size: 0.9em;
+		}
+	}
+</style>
